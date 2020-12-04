@@ -151,8 +151,7 @@ func parseInput() []passport {
 	var passports []passport
 	for _, pp := range pps {
 		passport := map[string]string{}
-		pp = strings.ReplaceAll(pp, "\n", " ")
-		kvs := strings.Split(pp, " ")
+		kvs := strings.Fields(pp)
 		for _, kv := range kvs {
 			ss := strings.Split(kv, ":")
 			passport[ss[0]] = ss[1]
