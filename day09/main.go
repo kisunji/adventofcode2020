@@ -21,10 +21,6 @@ func main() {
 	target := xmas[invalid]
 
 	fmt.Printf("target: %d\n", target)
-	// this is not a general solution and will fail in cases like
-	// 1, 100, 2, 5, 25 (target: 105)
-	// 1, [100, 2, 5], 25 (107 > 105, so raise lower)
-	// 1, 100, [2, 5], 25 (skipped solution)
 	lower, upper := 0, 1
 	sum := xmas[lower] + xmas[upper]
 	for sum != target && upper < target {
