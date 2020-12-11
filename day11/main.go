@@ -68,137 +68,31 @@ func main() {
 
 func canSeeOccupied(x int, y int, grid map[coords]rune, threshold int) bool {
 	var count int
-	// NW
-	iy := y - 1
-	ix := x - 1
-	for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}] {
-		if val == '#' {
-			count++
-			if count >= threshold {
-				return true
-			}
-			break
-		}
-		if val == 'L' {
-			break
-		}
-		ix--
-		iy--
+	ops := []func(x, y int) (int, int){
+		func(x, y int) (int, int) { return x - 1, y - 1 }, // NW
+		func(x, y int) (int, int) { return x, y - 1 },     // N
+		func(x, y int) (int, int) { return x + 1, y - 1 }, // NE
+		func(x, y int) (int, int) { return x - 1, y },     // W
+		func(x, y int) (int, int) { return x + 1, y },     // E
+		func(x, y int) (int, int) { return x - 1, y + 1 }, // SW
+		func(x, y int) (int, int) { return x, y + 1 },     // S
+		func(x, y int) (int, int) { return x + 1, y + 1 }, // SE
 	}
-	// N
-	iy = y - 1
-	ix = x
-	for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}] {
-		if val == '#' {
-			count++
-			if count >= threshold {
-				return true
+	for _, op := range ops {
+		ix, iy := op(x,y)
+		for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}] {
+			if val == '#' {
+				count++
+				if count >= threshold {
+					return true
+				}
+				break
 			}
-			break
-		}
-		if val == 'L' {
-			break
-		}
-		iy--
-	}
-	// NE
-	iy = y - 1
-	ix = x + 1
-	for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}]{
-		if val == '#' {
-			count++
-			if count >= threshold {
-				return true
+			if val == 'L' {
+				break
 			}
-			break
+			ix, iy = op(ix, iy)
 		}
-		if val == 'L' {
-			break
-		}
-		ix++
-		iy--
-	}
-	// W
-	iy = y
-	ix = x - 1
-	for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}] {
-		if val == '#' {
-			count++
-			if count >= threshold {
-				return true
-			}
-			break
-		}
-		if val == 'L' {
-			break
-		}
-		ix--
-	}
-	// E
-	iy = y
-	ix = x + 1
-	for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}] {
-		if val == '#' {
-			count++
-			if count >= threshold {
-				return true
-			}
-			break
-		}
-		if val == 'L' {
-			break
-		}
-		ix++
-	}
-	// SW
-	iy = y + 1
-	ix = x - 1
-	for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}] {
-		if val == '#' {
-			count++
-			if count >= threshold {
-				return true
-			}
-			break
-		}
-		if val == 'L' {
-			break
-		}
-		ix--
-		iy++
-	}
-	// S
-	iy = y + 1
-	ix = x
-	for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}] {
-		if val == '#' {
-			count++
-			if count >= threshold {
-				return true
-			}
-			break
-		}
-		if val == 'L' {
-			break
-		}
-		iy++
-	}
-	// SE
-	iy = y + 1
-	ix = x + 1
-	for val, ok := grid[coords{ix, iy}]; ok; val, ok = grid[coords{ix, iy}] {
-		if val == '#' {
-			count++
-			if count >= threshold {
-				return true
-			}
-			break
-		}
-		if val == 'L' {
-			break
-		}
-		ix++
-		iy++
 	}
 	return false
 }
