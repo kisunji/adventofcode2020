@@ -157,20 +157,13 @@ func main_1() {
 }
 
 func printGrid(grid map[coords]rune, lenX, lenY int) {
-	var rows []string
 	for y := 0; y < lenY; y++ {
-		var row string
 		for x := 0; x < lenX; x++ {
 			if val, ok := grid[coords{x, y}]; ok {
-				row = fmt.Sprintf("%s%s", row, string(val))
-			} else {
-				row = fmt.Sprintf("%s.", row)
+				fmt.Printf("%c", val)
 			}
 		}
-		rows = append(rows, row)
-	}
-	for _, s := range rows {
-		fmt.Println(s)
+		fmt.Println("")
 	}
 }
 
