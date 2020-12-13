@@ -16,13 +16,13 @@ outer:
 	for {
 		// tracks the product of all seen busIds
 		increment := 1
-		for i := 0; i < len(buses); i++ {
-			if buses[i] == "x" {
+		for i, bus := range buses {
+			if bus == "x" {
 				continue
 			}
-			busId, _ := strconv.Atoi(buses[i])
+			busId, _ := strconv.Atoi(bus)
 			if (t+i)%busId != 0 {
-				t += increment
+				t += increment // jump by product of all seen busIds
 				continue outer
 			}
 			fmt.Printf("index %d time %d\n", i, t)
