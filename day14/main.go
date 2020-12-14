@@ -11,7 +11,6 @@ func main() {
 	mask := [36]rune{}
 	mem := map[int]int{}
 	for _, line := range lines {
-		fmt.Println(line)
 		elems := strings.Split(line, " = ")
 		if elems[0] == "mask" {
 			for i, c := range elems[1] {
@@ -44,25 +43,25 @@ func main() {
 
 		var addresses []int
 
-		fmt.Printf("initaddr: %s\n", strconv.FormatInt(int64(initaddr), 2))
-
 		// starting from rightmost float index, add 2 addresses.
-		// (set 0 and 1 at floatIndex)
+		// since we don't know about upcoming float indices on the left,
+		// the addresses that we add are placeholders that will be doubled
+		// then overwritten at each successive float index.
 		for _, f := range floatIndices {
 			if len(addresses) == 0 {
-				f1 := initaddr &^ (1 << f)
-				addresses = append(addresses, f1)
-				f0 := initaddr | 1<<f
-				addresses = append(addresses, f0)
+				a1 := initaddr &^ (1 << f)
+				addresses = append(addresses, a1)
+				a0 := initaddr | 1<<f
+				addresses = append(addresses, a0)
 				continue
 			}
 			// add 2 addresses for each existing address
 			var newAddresses []int
-			for _, fv := range addresses {
-				f1 := fv &^ (1 << f)
-				newAddresses = append(newAddresses, f1)
-				f0 := fv | 1<<f
-				newAddresses = append(newAddresses, f0)
+			for _, addr := range addresses {
+				a1 := addr &^ (1 << f)
+				newAddresses = append(newAddresses, a1)
+				a0 := addr | 1<<f
+				newAddresses = append(newAddresses, a0)
 			}
 			addresses = newAddresses
 		}
