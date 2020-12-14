@@ -35,33 +35,22 @@ func main() {
 		}
 
 		val, _ := strconv.Atoi(elems[1])
-		if len(floatIndices) == 0 {
-			mem[initaddr] = val
-			continue
-		}
 
-		var addresses []int
+		addresses := []int{initaddr}
 
-		// starting from rightmost float index, add 2 addresses.
-		// since we don't know about upcoming float indices on the left,
-		// the addresses that we add are placeholders that will be doubled
-		// then overwritten at each successive float index.
 		for _, f := range floatIndices {
-			if len(addresses) == 0 {
-				a1 := initaddr &^ (1 << f)
-				addresses = append(addresses, a1)
-				a0 := initaddr | 1<<f
-				addresses = append(addresses, a0)
-				continue
-			}
-			// add 2 addresses for each existing address
+			// for each existing address, allocate two updated addresses
+			// with bit set to 1 and 0 at floatIndex f
 			var newAddresses []int
 			for _, addr := range addresses {
-				a1 := addr &^ (1 << f)
-				newAddresses = append(newAddresses, a1)
-				a0 := addr | 1<<f
+				// credit: https://stackoverflow.com/a/10571939
+				a0 := addr &^ (1 << f) // set bit f of addr to 0
 				newAddresses = append(newAddresses, a0)
+
+				a1 := addr | 1<<f // set bit f of addr to 1
+				newAddresses = append(newAddresses, a1)
 			}
+			// overwrite addresses with newly updated leftmost bits
 			addresses = newAddresses
 		}
 
