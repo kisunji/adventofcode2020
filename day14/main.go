@@ -24,7 +24,6 @@ func main() {
 
 		var floatIndices []int
 		for i, m := range mask {
-			// credit: https://stackoverflow.com/a/10571939
 			switch m {
 			case 'X':
 				floatIndices = append(floatIndices, i)
